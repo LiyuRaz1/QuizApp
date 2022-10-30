@@ -3,7 +3,7 @@
 
 
 {% block script %}
-  <script src="{% static 'quizes/main.js' %}" defer></script>
+  <script type="text/javascript" src="{% static 'quizes/main.js' %}" defer></script>
 
 {% endblock script %}
 
@@ -26,8 +26,8 @@
     </div>
     <div class="modal-body" id="modal-body-confirm"></div>
     <div class="modal-footer">
-      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-      <button type="button" class="btn btn-primary">Save changes</button>
+      <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      <button type="button" id="start-button" class="btn btn-success">Yes</button>
     </div>
   </div>
 </div>
@@ -48,7 +48,7 @@
         data-toggle="modal" 
         data-target="#quizStartModal">
         {{obj.name}}
-    </button>
+    </button><br>
 {% endfor %}
 </div> 
 
