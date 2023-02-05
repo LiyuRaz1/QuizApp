@@ -1,8 +1,9 @@
 console.log('hello world quiz')
-const url = window.location.href
+const urlz = window.location.href
+const urly = window.location.replace
 
 const quizBox = document.getElementById('quiz-box')
-const scoreBox = document.getElementById('score-box')
+// const scoreBox = document.getElementById('score-box')
 const resultBox = document.getElementById('result-box')
 const timerBox = document.getElementById('timer-box')
 
@@ -50,7 +51,7 @@ const activateTimer = (time) => {
 
 $.ajax({
     type: 'GET',
-    url: `${url}data`,
+    url: `${urlz}data`,
     success: function(response){
         const data = response.data
         data.forEach(el => {
@@ -60,7 +61,8 @@ $.ajax({
                     <div class="mb-2">
                         <b>${question}</b>
                     </div>
-                `
+                ` 
+                ,
                 answers.forEach(answer=>{
                     quizBox.innerHTML += `
                         <div>
@@ -98,47 +100,58 @@ const sendData = () => {
 
     $.ajax({
         type: 'POST',
-        url: `${url}save/`,
+        url: `${urlz}save/`,
+        
         data: data,
+
         success: function(response){
-            const results = response.results
-            console.log(results)
-            quizForm.classList.add('not-visible')
+        
+                window.location.replace('submit/');
+            },
+        
 
-            scoreBox.innerHTML = `${response.passed ? 'Congratulations! ' : 'Ups..:( '}Your result is ${response.score.toFixed(2)}%`
+        
+        
+        // success: function(response){
+        //     const results = response.results
+        //     console.log(results)
+        //     quizForm.classList.add('not-visible')
 
-            results.forEach(res=>{
-                const resDiv = document.createElement("div")
-                for (const [question, resp] of Object.entries(res)){
+        //     // scoreBox.outerHTML = `${resp  5wwonse.passed ? 'Congratulations! ' : 'Ups..:( '}Your result is ${response.score.toFixed(2)}%`
 
-                    resDiv.innerHTML += question
-                    const cls = ['container', 'p-3', 'text-light', 'h6']
-                    resDiv.classList.add(...cls)
+        //     results.forEach(res=>{
+        //         const resDiv = document.createElement("div")
+        //         for (const [question, resp] of Object.entries(res)){
 
-                    if (resp=='not answered') {
-                        resDiv.innerHTML += '- not answered'
-                        resDiv.classList.add('bg-danger')
-                    }
-                    else {
-                        const answer = resp['answered']
-                        const correct = resp['correct_answer']
+        //             resDiv.innerHTML += question
+        //             const cls = ['container', 'p-3', 'text-light', 'h6']
+        //             resDiv.classList.add(...cls)
 
-                        if (answer == correct) {
-                            resDiv.classList.add('bg-success')
-                            resDiv.innerHTML += ` answered: ${answer}`
-                        } else {
-                            resDiv.classList.add('bg-danger')
-                            resDiv.innerHTML += ` | correct answer: ${correct}`
-                            resDiv.innerHTML += ` | answered: ${answer}`
-                        }
-                    }
-                }
-                resultBox.append(resDiv)
-            })
-        },
+        //             if (resp=='not answered') {
+        //                 resDiv.innerHTML += '- not answered'
+        //                 resDiv.classList.add('bg-danger') 
+        //             }
+        //             else {
+        //                 const answer = resp['answered']
+        //                 const correct = resp['correct_answer']
+
+        //                 if (answer == correct) {
+        //                     resDiv.classList.add('bg-success')
+        //                     resDiv.innerHTML += ` answered: ${answer}`
+        //                 } else {
+        //                     resDiv.classList.add('bg-danger')
+        //                     resDiv.innerHTML += ` | correct answer: ${correct}`
+        //                     resDiv.innerHTML += ` | answered: ${answer}`
+        //                 }
+        //             }
+        //         }
+        //         resultBox.append(resDiv)
+        //     })
+        // },
         error: function(error){
             console.log(error)
         }
+        
     })
 }
 

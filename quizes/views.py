@@ -1,18 +1,22 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from .models import Quiz
 from django.views.generic import ListView
 from django.http import JsonResponse
 from questions.models import Questions, Answer
 from results.models import Result 
+from django.contrib.auth.decorators import login_required
+
 # Create your views here.
 
 class QuizListView(ListView):
     model = Quiz
     template_name = 'quizes/main.html'
 
+
 def quiz_view(request, pk):
     quiz = Quiz.objects.get(pk=pk)
     return render(request, 'quizes/quiz.html', {'obj':quiz})
+
 
 def quiz_data_view(request, pk):
     quiz = Quiz.objects.get(pk=pk)
@@ -29,7 +33,7 @@ def quiz_data_view(request, pk):
 
 
 def save_quiz_view(request, pk):
-    if request.is_ajax():
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest' :
         questions = []
         data = request.POST
         data_ = dict(data.lists())
@@ -68,10 +72,15 @@ def save_quiz_view(request, pk):
             else:
                 results.append({str(q): 'not answered'})
             
-        score_ = score * multiplier
+        score_ = score * multiplier  
         Result.objects.create(quiz=quiz, user=user, score=score_)
 
-        if score_ >= quiz.required_score_to_pass:
-            return JsonResponse({'passed': True, 'score': score_, 'results': results})
-        else:
-            return JsonResponse({'passed': False, 'score': score_, 'results': results})
+        # if score_ >= quiz.required_score_to_pass:
+        #     return JsonResponse({'passed': True, 'score': score_, 'results': results})
+        # else:
+        #     return JsonResponse({'passed': False, 'score': score_, 'results': results})
+    return redirect('quizes:main-view')
+
+
+def submit_view(request,pk):
+    return render(request,'quizes/submit.html')

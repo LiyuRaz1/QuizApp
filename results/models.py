@@ -9,4 +9,6 @@ class Result(models.Model):
     score = models.FloatField()
 
     def __str__(self):
-        return str(self.pk)
+        
+        return f"{self.user} {round(self.score,2)}"
+        
